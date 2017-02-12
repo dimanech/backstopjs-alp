@@ -1,0 +1,42 @@
+# Avoid to commit any binary data
+*.psd
+*.zip
+*.7zip
+*.tar
+*.rar
+
+*.diff
+*.err
+*.orig
+*.rej
+*.swo
+*.swp
+*.sass-cache
+*.vi
+*~
+*.gem
+*.rbc
+
+.DS_Store
+._*
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+.idea
+.pydevproject
+.externalToolBuilders
+.settings
+RemoteSystemsTempFiles
+.metadata
+
+# Dependency directory
+node_modules
+
+# Logs
+logs
+*.log
+
+# Maps
+*.map
+
+.grunt
