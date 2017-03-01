@@ -11,6 +11,7 @@ RUN apk add --no-cache \
 
 ENV PHANTOMJS_VERSION 2.1.1
 ENV CASPERJS_VERSION 1.1.3
+ENV BACKSTOP_VERSION 2.5.0
 
 RUN \
 	mkdir -p /opt && \
@@ -29,15 +30,30 @@ RUN \
 	mv casperjs-$CASPERJS_VERSION /opt/casperjs && \
 	ln -s /opt/casperjs/bin/casperjs /usr/bin/casperjs
 
-RUN npm install -g backstopjs@2.5.0
+RUN npm install -g backstopjs@${BACKSTOP_VERSION}
 
-COPY fonts.conf /root/.config/fontconfig/
+RUN \
+	adduser -D backstop && \
+	# Add possibility to use project folder as font folder
+	ln -s /app/.fonts /home/backstop/.fonts && \
+	ln -s /app/.fonts /root/.fonts
+# TODO: investigate to use <dir>/app/fonts</dir> in /etc/local.conf without symlink
 
-RUN mkdir -p /app/.fonts
-RUN ln -s /app/.fonts /root/.fonts
-RUN mkdir -p /root/.config/fontconfig
-COPY fonts.conf /root/.config/fontconfig/
-RUN ln -s /root/.config/fontconfig/fonts.conf /root/.fonts.conf
+# Make our config default
+COPY fonts.conf /etc/fonts/local.conf
+
+# Add entry point to override font config from project `.fonts.conf`
+COPY fonts.conf /app/.fonts.conf
+RUN \
+	mkdir -p /home/backstop/.config/fontconfig && \
+	mkdir -p /root/.config/fontconfig && \
+	ln -s /app/.fonts.conf /home/backstop/.config/fontconfig/fonts.conf && \
+	ln -s /app/.fonts.conf /root/.config/fontconfig/fonts.conf
+
+RUN \
+	chown backstop:backstop /app && \
+	su - backstop
+
 WORKDIR /app
 
 ENTRYPOINT ["backstop"]
