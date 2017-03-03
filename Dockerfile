@@ -34,21 +34,22 @@ RUN npm install -g backstopjs@${BACKSTOP_VERSION}
 
 RUN \
 	adduser -D backstop && \
+	mkdir -p /app && \
 	# Add possibility to use project folder as font folder
 	ln -s /app/.fonts /home/backstop/.fonts && \
 	ln -s /app/.fonts /root/.fonts
 # TODO: investigate to use <dir>/app/fonts</dir> in /etc/local.conf without symlink
 
 # Make our config default
-COPY fonts.conf /etc/fonts/local.conf
+# COPY fonts.conf /etc/fonts/local.conf
 
 # Add entry point to override font config from project `.fonts.conf`
-COPY fonts.conf /app/.fonts.conf
-RUN \
-	mkdir -p /home/backstop/.config/fontconfig && \
-	mkdir -p /root/.config/fontconfig && \
-	ln -s /app/.fonts.conf /home/backstop/.config/fontconfig/fonts.conf && \
-	ln -s /app/.fonts.conf /root/.config/fontconfig/fonts.conf
+#COPY fonts.conf /app/.fonts.conf
+#RUN \
+#	mkdir -p /home/backstop/.config/fontconfig && \
+#	mkdir -p /root/.config/fontconfig && \
+#	ln -s /app/.fonts.conf /home/backstop/.config/fontconfig/fonts.conf && \
+#	ln -s /app/.fonts.conf /root/.config/fontconfig/fonts.conf
 
 RUN \
 	chown backstop:backstop /app && \
